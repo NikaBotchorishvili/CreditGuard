@@ -1,3 +1,6 @@
-from django.contrib import admin
+from django.contrib.admin import register, ModelAdmin 
+from cards.models import Card
 
-# Register your models here.
+@register(Card)
+class Card(ModelAdmin):
+    list_display = ['user', 'title', 'censoredNumber', 'isValid', 'created_at']

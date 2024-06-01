@@ -7,6 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),  
     path('', SpectacularSwaggerView.as_view(url_name='schema')),
-    path("/", include("cards.urls")),
+    path("api/cards/", include("cards.urls")),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]

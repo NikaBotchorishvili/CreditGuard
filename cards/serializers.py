@@ -1,15 +1,20 @@
-from rest_framework.serializers import ModelSerializer, ValidationError, CharField, IntegerField
+from rest_framework.serializers import ModelSerializer, Serializer, ValidationError, CharField, IntegerField, BooleanField
 from cards.models import Card
 
-class CardSerializer(ModelSerializer):
-    card_number = CharField(write_only=True)
-    ccv = IntegerField(write_only=True)
 
+class ListCardSerializer(ModelSerializer):
     class Meta:
         model = Card
-        fields = ["id", "user", "title", "censoredNumber", "isValid", "created_at"]
-        
-    def validate_cvv(self, value):
+        fields = "__all__"
+        read_only_fields = ['user', 'censored_number', 'is_valid', 'created_at']
+
+
+class CreateCardSerializer(Serializer):
+    title = CharField(max_length=100)
+    card_number = CharField(write_only=True, max_length=16)
+    ccv = IntegerField(write_only=True)
+    isValid = BooleanField(read_only=True)
+    def validate_ccv(self, value):
         if value < 100 or value > 999:
             raise ValidationError("CVV must be a 3 digit number")
         return value
@@ -31,9 +36,12 @@ class CardSerializer(ModelSerializer):
         data["isValid"] = False
         return data
     
-    def create(self, validated_data):
-        card_number = validated_data.pop('card_number')
+class CardSerializer(ModelSerializer):
+    card_number = CharField(write_only=True)
+    ccv = IntegerField(write_only=True)
 
-        censoredNumber = card_number[:4] + "****" + card_number[-4:]
-        validated_data["censoredNumber"] = censoredNumber
-        return super().create(validated_data)
+    class Meta:
+        model = Card
+        fields = ["id", "user", "title", "censoredNumber", "isValid", "created_at", 'card_number', 'ccv']
+        read_only_fields = ['user', 'censored_number', 'is_valid', 'created_at']
+        

@@ -7,3 +7,9 @@ class Card(models.Model):
     censoredNumber = models.CharField(max_length=16)
     isValid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    def save(self, *args, **kwargs):
+        self.censoredNumber = self.censoredNumber[:4] + "********" + self.censoredNumber[-4:]
+        return super().save(*args, **kwargs)
+    
