@@ -6,7 +6,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from drf_spectacular.types import OpenApiTypes
-from cards.serializers import CardSerializer, ListCardSerializer, CreateCardSerializer
+from cards.serializers import CardSerializer, CreateCardSerializer
 from config.serializers import ErrorResponseSerializer
 from rest_framework.permissions import IsAuthenticated
 from cards.models import Card
@@ -19,7 +19,7 @@ from rest_framework.request import Request
     ),
     RetrieveCardsByUser=extend_schema(
         request=None,
-        responses={200: ListCardSerializer(many=True)}
+        responses={200: CardSerializer(many=True)}
     )
 )
 class CardViewSet(ViewSet):
@@ -33,7 +33,7 @@ class CardViewSet(ViewSet):
             card_number = request.data["card_number"]
             title = request.data["title"]
             isValidCreditCard = serializer["isValid"].value
-            newCard = Card(
+            newCard = Card.objects.create(
                 user=user,
                 title=title,
                 censoredNumber=card_number,
@@ -43,14 +43,18 @@ class CardViewSet(ViewSet):
                 newCard.save()
             except Exception as e:
                 return Response(data={"error":str(e)}, status=status.HTTP_400_BAD_REQUEST)
-            return Response(data={"user":user.id}, status=status.HTTP_201_CREATED)
-        
+            
+            serializedCard = CardSerializer(newCard)
+            return Response(data=serializedCard.data, status=status.HTTP_201_CREATED)            
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
     @action(methods=['get'], detail=False, url_path='', url_name='retrieve-all-cards')
-    def RetrieveCardsByUser(self, request, user_id):
-        pass
+    def RetrieveCardsByUser(self, request):
+        user = request.user
+        cards = Card.objects.filter(user=user)
+        serializedCards = CardSerializer(cards, many=True)
+        return Response(data=serializedCards.data, status=status.HTTP_200_OK)
     
     
 router = DefaultRouter()

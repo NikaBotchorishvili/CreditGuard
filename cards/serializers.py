@@ -1,14 +1,6 @@
 from rest_framework.serializers import ModelSerializer, Serializer, ValidationError, CharField, IntegerField, BooleanField
 from cards.models import Card
 
-
-class ListCardSerializer(ModelSerializer):
-    class Meta:
-        model = Card
-        fields = "__all__"
-        read_only_fields = ['user', 'censored_number', 'is_valid', 'created_at']
-
-
 class CreateCardSerializer(Serializer):
     title = CharField(max_length=100)
     card_number = CharField(write_only=True, max_length=16)
@@ -37,11 +29,7 @@ class CreateCardSerializer(Serializer):
         return data
     
 class CardSerializer(ModelSerializer):
-    card_number = CharField(write_only=True)
-    ccv = IntegerField(write_only=True)
-
     class Meta:
         model = Card
-        fields = ["id", "user", "title", "censoredNumber", "isValid", "created_at", 'card_number', 'ccv']
+        fields = ["id", "user", "title", "censoredNumber", "isValid", "created_at"]
         read_only_fields = ['user', 'censored_number', 'is_valid', 'created_at']
-        
