@@ -9,5 +9,4 @@ urlpatterns = [
     path('', SpectacularSwaggerView.as_view(url_name='schema')),
     path("/", include("cards.urls")),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    
 ]

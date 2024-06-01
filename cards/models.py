@@ -6,3 +6,4 @@ class Card(models.Model):
     title = models.CharField(max_length=100)
     censoredNumber = models.CharField(max_length=16)
     isValid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
