@@ -19,3 +19,5 @@ JWT_SECRET=eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9
   password: 12345678
 }
 ```
+
+Authentication steps if necessary: https://scribehow.com/shared/Authenticate_and_authorize_API_requests_using_Swagger_UI__v7tCEJk3RXGcK3jBE3BrNQ
