@@ -5,14 +5,12 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
-from drf_spectacular.types import OpenApiTypes
 from cards.serializers import CardSerializer, CreateCardSerializer
 from config.serializers import ErrorResponseSerializer
 from rest_framework.permissions import IsAuthenticated
 from cards.models import Card
 from rest_framework.request import Request
 from cards.filters import CardFilter
-from django_filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 

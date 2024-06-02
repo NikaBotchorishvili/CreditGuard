@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.test import APIClient
 import random, string, time
 from typing import TypedDict
-from cards.serializers import CardSerializer
+
 class Credentials(TypedDict):
     card_number: str
     ccv: str

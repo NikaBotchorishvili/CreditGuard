@@ -1,5 +1,5 @@
 from cards.models import Card
-from django_filters import FilterSet # type: ignore
+from django_filters import FilterSet
 
 class CardFilter(FilterSet):
     class Meta:
