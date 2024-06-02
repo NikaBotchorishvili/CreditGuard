@@ -1,7 +1,9 @@
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:5000
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:5000"
     volumes:
       - .:/app
     ports:
@@ -9,6 +11,8 @@ services:
     environment:
       - JWT_ALGORITHM=${JWT_ALGORITHM}
       - JWT_SECRET=${JWT_SECRET}
+    entrypoint: ["/app/entrypoint.sh"]
+
   #   depends_on:
   #     - db
   # db:
