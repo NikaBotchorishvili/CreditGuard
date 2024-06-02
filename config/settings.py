@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_spectacular',
-    'cards'
+    'cards',
+    'django_filters'
 ]
 
 MIDDLEWARE = [

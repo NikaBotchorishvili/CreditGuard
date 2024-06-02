@@ -4,18 +4,24 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from rest_framework.routers import DefaultRouter
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 from cards.serializers import CardSerializer, CreateCardSerializer
 from config.serializers import ErrorResponseSerializer
 from rest_framework.permissions import IsAuthenticated
 from cards.models import Card
 from rest_framework.request import Request
+from cards.filters import CardFilter
+from django_filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
 
 @extend_schema_view(
     CreateNewCard=extend_schema(
         request=CreateCardSerializer,
-        responses={201: CardSerializer, 400: ErrorResponseSerializer}
+        responses={201: CardSerializer, 400: ErrorResponseSerializer},
+       
     ),
     RetrieveCardsByUser=extend_schema(
         request=None,
@@ -24,6 +30,11 @@ from rest_framework.request import Request
 )
 class CardViewSet(ViewSet):
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = CardFilter
+    queryset = Card.objects.none()
+    ordering_fields = ['created_at']
+    ordering = ['created_at']
     
     @action(methods=['post'], detail=False, url_path='create', url_name='create-new-card')
     def CreateNewCard(self, request: Request):
@@ -52,10 +63,12 @@ class CardViewSet(ViewSet):
     @action(methods=['get'], detail=False, url_path='', url_name='retrieve-all-cards')
     def RetrieveCardsByUser(self, request):
         user = request.user
-        cards = Card.objects.filter(user=user)
-        serializedCards = CardSerializer(cards, many=True)
+        queryset = Card.objects.filter(user=user.id)
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, view=self)
+        serializedCards = CardSerializer(queryset, many=True)
         return Response(data=serializedCards.data, status=status.HTTP_200_OK)
     
-    
+
 router = DefaultRouter()
 router.register(r'cards', CardViewSet, basename='cards')
