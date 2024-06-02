@@ -44,6 +44,7 @@ class CardViewSet(ViewSet):
             card_number = request.data["card_number"]
             title = request.data["title"]
             isValidCreditCard = serializer["isValid"].value
+            print(isValidCreditCard)
             newCard = Card.objects.create(
                 user=user,
                 title=title,
@@ -71,4 +72,4 @@ class CardViewSet(ViewSet):
     
 
 router = DefaultRouter()
-router.register(r'', CardViewSet, basename='')
+router.register(r'', CardViewSet, basename='card')
