@@ -9,3 +9,6 @@ To set up your environment for the Credit Guard project, create a `.env` file in
 
 JWT_ALGORITHM=HS256
 JWT_SECRET=eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9
+
+
+
