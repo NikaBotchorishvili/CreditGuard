@@ -12,7 +12,7 @@ JWT_SECRET=eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9
 ```
 ## Default User Credentials
 
-```js
+```py
 {
   username: demetre,
   email: chakvetadzedemetre@gmail.com,
