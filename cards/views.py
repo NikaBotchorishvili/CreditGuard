@@ -60,7 +60,7 @@ class CardViewSet(ViewSet):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
-    @action(methods=['get'], detail=False, url_path='', url_name='retrieve-all-cards')
+    @action(methods=['get'], detail=False, url_path='byUser', url_name='retrieve-all-cards')
     def RetrieveCardsByUser(self, request):
         user = request.user
         queryset = Card.objects.filter(user=user.id)
@@ -71,4 +71,4 @@ class CardViewSet(ViewSet):
     
 
 router = DefaultRouter()
-router.register(r'cards', CardViewSet, basename='cards')
+router.register(r'', CardViewSet, basename='')
